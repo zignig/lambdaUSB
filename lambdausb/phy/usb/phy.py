@@ -25,10 +25,10 @@ class USBPHY(Elaboratable):
         tx = m.submodules.tx = USBPHYTX(self.sync_freq)
 
         m.d.comb += [
-            rx.din[0].eq(self.pins.p.i),
-            rx.din[1].eq(self.pins.n.i),
-            self.pins.p.o.eq(tx.dout[0]),
-            self.pins.n.o.eq(tx.dout[1])
+            rx.din[0].eq(self.pins.d_p.i),
+            rx.din[1].eq(self.pins.d_n.i),
+            self.pins.d_p.o.eq(tx.dout[0]),
+            self.pins.d_n.o.eq(tx.dout[1])
         ]
 
         period = int(self.sync_freq//12e6)
@@ -60,8 +60,8 @@ class USBPHY(Elaboratable):
 
         m.d.comb += [
             rx.enable.eq(~fsm.ongoing("TRANSMIT")),
-            self.pins.p.oe.eq(fsm.ongoing("TRANSMIT")),
-            self.pins.n.oe.eq(fsm.ongoing("TRANSMIT"))
+            self.pins.d_p.oe.eq(fsm.ongoing("TRANSMIT")),
+            self.pins.d_n.oe.eq(fsm.ongoing("TRANSMIT"))
         ]
 
         return m
